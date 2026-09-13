@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+
+actor "Неавторизованный\nпользователь" as User
+
+usecase "Вход" as Login
+usecase "Регистрация" as Register
+usecase "Смена пароля" as PasswordChange
+
+User -- Login
+User -- Register
+User -- PasswordChange
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+left to right direction
+
+entity "user" as user {
+  * **id** : bigint <<PK>>
+  --
+  * login : varchar(100) <<UQ>>
+  * password : TEXT
+}
+
+entity "event" as event {
+  * **id** : bigint <<PK>>
+  --
+  * user_id : bigint <<FK>>
+  * title : varchar(100)
+  * location : varchar(300)
+  * starts_at : timestamp
+  * ends_at : timestamp
+}
+
+user ||--o{ event
+@enduml
