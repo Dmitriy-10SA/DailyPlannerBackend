@@ -1,0 +1,19 @@
+@startuml
+left to right direction
+
+actor "Авторизованный\nпользователь" as AuthUser
+
+usecase "Просмотр\nмероприятий\nдня" as View
+usecase "Поиск\nмероприятий" as Search
+usecase "Добавление\nмероприятия" as Add
+usecase "Редактирование\nмероприятия" as Edit
+usecase "Удаление\nмероприятия" as Remove
+usecase "Выход\nиз аккаунта" as Logout
+
+AuthUser -- View
+AuthUser -- Search
+AuthUser -- Add
+AuthUser -- Edit
+AuthUser -- Remove
+AuthUser -- Logout
+@enduml
