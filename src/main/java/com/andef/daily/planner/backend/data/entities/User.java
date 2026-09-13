@@ -15,6 +15,8 @@ import lombok.Setter;
  */
 @Entity
 @Table(name = "\"user\"")
+@Getter
+@Setter
 @NoArgsConstructor
 public class User {
 
@@ -23,21 +25,17 @@ public class User {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
     private Long id;
 
     /**
      * Логин
      */
     @Column(nullable = false, unique = true, length = 100)
-    @Getter
     private String login;
 
     /**
      * Пароль
      */
     @Column(nullable = false, columnDefinition = "TEXT")
-    @Getter
-    @Setter
     private String password;
 }
