@@ -2,9 +2,9 @@ package com.andef.daily.planner.backend.domain.mappers;
 
 import com.andef.daily.planner.backend.data.entities.Event;
 import com.andef.daily.planner.backend.data.entities.User;
-import com.andef.daily.planner.backend.network.dtos.event.CreateEventRequestDto;
-import com.andef.daily.planner.backend.network.dtos.event.EventResponseDto;
-import com.andef.daily.planner.backend.network.dtos.event.UpdateEventRequestDto;
+import com.andef.daily.planner.backend.network.dtos.event.CreateEventDto;
+import com.andef.daily.planner.backend.network.dtos.event.EventDto;
+import com.andef.daily.planner.backend.network.dtos.event.UpdateEventDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -31,7 +31,7 @@ public interface EventMapper {
     @Mapping(target = "location", source = "request.location")
     @Mapping(target = "startsAt", source = "request.startsAt")
     @Mapping(target = "endsAt", source = "request.endsAt")
-    Event toEntity(User user, CreateEventRequestDto request);
+    Event toEntity(User user, CreateEventDto request);
 
     /**
      * Переносит данные изменения в мероприятие
@@ -41,7 +41,7 @@ public interface EventMapper {
      */
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
-    void updateEntity(UpdateEventRequestDto request, @MappingTarget Event event);
+    void updateEntity(UpdateEventDto request, @MappingTarget Event event);
 
     /**
      * Преобразует мероприятие в данные ответа
@@ -49,7 +49,7 @@ public interface EventMapper {
      * @param event Мероприятие
      * @return Данные мероприятия
      */
-    EventResponseDto toResponse(Event event);
+    EventDto toResponse(Event event);
 
     /**
      * Преобразует мероприятия в данные ответа
@@ -57,5 +57,5 @@ public interface EventMapper {
      * @param events Мероприятия
      * @return Данные мероприятий
      */
-    List<EventResponseDto> toResponseList(List<Event> events);
+    List<EventDto> toResponseList(List<Event> events);
 }

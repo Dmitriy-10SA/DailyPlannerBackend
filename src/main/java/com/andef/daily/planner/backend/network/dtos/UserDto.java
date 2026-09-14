@@ -1,4 +1,4 @@
-package com.andef.daily.planner.backend.network.dtos.user;
+package com.andef.daily.planner.backend.network.dtos;
 
 /**
  * Данные пользователя
@@ -6,5 +6,5 @@ package com.andef.daily.planner.backend.network.dtos.user;
  * @param id    Идентификатор
  * @param login Логин
  */
-public record UserResponseDto(Long id, String login) {
+public record UserDto(Long id, String login) {
 }

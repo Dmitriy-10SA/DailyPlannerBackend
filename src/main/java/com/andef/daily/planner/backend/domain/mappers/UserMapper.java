@@ -1,8 +1,8 @@
 package com.andef.daily.planner.backend.domain.mappers;
 
 import com.andef.daily.planner.backend.data.entities.User;
-import com.andef.daily.planner.backend.network.dtos.user.RegisterRequestDto;
-import com.andef.daily.planner.backend.network.dtos.user.UserResponseDto;
+import com.andef.daily.planner.backend.network.dtos.UserDto;
+import com.andef.daily.planner.backend.network.dtos.auth.RegisterDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -23,7 +23,7 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "login", source = "request.login")
     @Mapping(target = "password", source = "passwordHash")
-    User toEntity(RegisterRequestDto request, String passwordHash);
+    User toEntity(RegisterDto request, String passwordHash);
 
     /**
      * Преобразует пользователя в данные ответа
@@ -31,5 +31,5 @@ public interface UserMapper {
      * @param user Пользователь
      * @return Данные пользователя
      */
-    UserResponseDto toResponse(User user);
+    UserDto toResponse(User user);
 }

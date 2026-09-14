@@ -5,11 +5,13 @@ import com.andef.daily.planner.backend.data.entities.User;
 import com.andef.daily.planner.backend.data.repositories.EventRepository;
 import com.andef.daily.planner.backend.domain.exceptions.EventNotFoundException;
 import com.andef.daily.planner.backend.domain.mappers.EventMapper;
-import com.andef.daily.planner.backend.network.dtos.event.CreateEventRequestDto;
+import com.andef.daily.planner.backend.domain.services.jwt.JwtService;
+import com.andef.daily.planner.backend.network.dtos.event.CreateEventDto;
+import com.andef.daily.planner.backend.network.dtos.event.EventDto;
 import com.andef.daily.planner.backend.network.dtos.event.EventFilterDto;
-import com.andef.daily.planner.backend.network.dtos.event.EventResponseDto;
-import com.andef.daily.planner.backend.network.dtos.event.UpdateEventRequestDto;
+import com.andef.daily.planner.backend.network.dtos.event.UpdateEventDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,10 +27,13 @@ public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
+    private final JwtService jwtService;
 
     @Transactional(readOnly = true)
     @Override
-    public List<EventResponseDto> findAllByDay(User user, EventFilterDto filter) {
+    public List<EventDto> findAllByDay(Authentication authentication, EventFilterDto filter) {
+        User user = jwtService.getUserFromAuthentication(authentication);
+
         List<Event> events = eventRepository
                 .findAllByUserAndDayAndSearchText(user, filter.day(), normalizeSearchText(filter.searchText()));
 
@@ -37,9 +42,10 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public EventResponseDto create(User user, CreateEventRequestDto request) {
+    public EventDto create(Authentication authentication, CreateEventDto request) {
         validateTimeRange(request.startsAt(), request.endsAt());
 
+        User user = jwtService.getUserFromAuthentication(authentication);
         Event event = eventRepository.save(eventMapper.toEntity(user, request));
 
         return eventMapper.toResponse(event);
@@ -47,9 +53,10 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public EventResponseDto update(User user, Long eventId, UpdateEventRequestDto request) {
+    public EventDto update(Authentication authentication, Long eventId, UpdateEventDto request) {
         validateTimeRange(request.startsAt(), request.endsAt());
 
+        User user = jwtService.getUserFromAuthentication(authentication);
         Event event = getUserEvent(user, eventId);
 
         eventMapper.updateEntity(request, event);
@@ -59,8 +66,11 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public void delete(User user, Long eventId) {
-        eventRepository.delete(getUserEvent(user, eventId));
+    public void delete(Authentication authentication, Long eventId) {
+        User user = jwtService.getUserFromAuthentication(authentication);
+        Event event = getUserEvent(user, eventId);
+
+        eventRepository.delete(event);
     }
 
     /**

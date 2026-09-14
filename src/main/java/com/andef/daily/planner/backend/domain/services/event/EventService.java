@@ -1,11 +1,11 @@
 package com.andef.daily.planner.backend.domain.services.event;
 
 import com.andef.daily.planner.backend.data.entities.Event;
-import com.andef.daily.planner.backend.data.entities.User;
-import com.andef.daily.planner.backend.network.dtos.event.CreateEventRequestDto;
+import com.andef.daily.planner.backend.network.dtos.event.CreateEventDto;
+import com.andef.daily.planner.backend.network.dtos.event.EventDto;
 import com.andef.daily.planner.backend.network.dtos.event.EventFilterDto;
-import com.andef.daily.planner.backend.network.dtos.event.EventResponseDto;
-import com.andef.daily.planner.backend.network.dtos.event.UpdateEventRequestDto;
+import com.andef.daily.planner.backend.network.dtos.event.UpdateEventDto;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -15,38 +15,38 @@ import java.util.List;
 public interface EventService {
 
     /**
-     * Возвращает мероприятия пользователя за выбранный день
+     * Возвращает мероприятия пользователя
      *
-     * @param user   Пользователь
-     * @param filter Параметры выборки
-     * @return Данные мероприятий по времени начала
+     * @param authentication Данные аутентификации
+     * @param filter         Параметры выборки
+     * @return Мероприятия пользователя
      */
-    List<EventResponseDto> findAllByDay(User user, EventFilterDto filter);
+    List<EventDto> findAllByDay(Authentication authentication, EventFilterDto filter);
 
     /**
-     * Создаёт мероприятие пользователя
+     * Создаёт мероприятие
      *
-     * @param user    Пользователь
-     * @param request Данные создания
-     * @return Данные созданного мероприятия
+     * @param authentication Данные аутентификации
+     * @param request        Данные создания
+     * @return Созданное мероприятие
      */
-    EventResponseDto create(User user, CreateEventRequestDto request);
+    EventDto create(Authentication authentication, CreateEventDto request);
 
     /**
-     * Изменяет мероприятие пользователя
+     * Изменяет мероприятие
      *
-     * @param user    Пользователь
-     * @param eventId Идентификатор мероприятия
-     * @param request Данные изменения
-     * @return Данные изменённого мероприятия
+     * @param authentication Данные аутентификации
+     * @param eventId        Идентификатор мероприятия
+     * @param request        Данные изменения
+     * @return Изменённое мероприятие
      */
-    EventResponseDto update(User user, Long eventId, UpdateEventRequestDto request);
+    EventDto update(Authentication authentication, Long eventId, UpdateEventDto request);
 
     /**
-     * Удаляет мероприятие пользователя
+     * Удаляет мероприятие
      *
-     * @param user    Пользователь
-     * @param eventId Идентификатор мероприятия
+     * @param authentication Данные аутентификации
+     * @param eventId        Идентификатор мероприятия
      */
-    void delete(User user, Long eventId);
+    void delete(Authentication authentication, Long eventId);
 }

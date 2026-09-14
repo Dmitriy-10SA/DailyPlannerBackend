@@ -1,21 +1,11 @@
 package com.andef.daily.planner.backend.domain.services.user;
 
 import com.andef.daily.planner.backend.data.entities.User;
-import com.andef.daily.planner.backend.network.dtos.user.RegisterRequestDto;
-import com.andef.daily.planner.backend.network.dtos.user.UserResponseDto;
 
 /**
  * Сервис для {@link User}
  */
 public interface UserService {
-
-    /**
-     * Регистрирует пользователя
-     *
-     * @param request Данные регистрации
-     * @return Данные созданного пользователя
-     */
-    UserResponseDto register(RegisterRequestDto request);
 
     /**
      * Находит пользователя по идентификатору
@@ -34,11 +24,18 @@ public interface UserService {
     User getByLogin(String login);
 
     /**
-     * Изменяет пароль пользователя
+     * Проверяет наличие пользователя с логином
      *
-     * @param user     Пользователь
-     * @param password Новый пароль
-     * @return Данные изменённого пользователя
+     * @param login Логин пользователя
+     * @return Признак существования пользователя
      */
-    UserResponseDto changePassword(User user, String password);
+    boolean existsByLogin(String login);
+
+    /**
+     * Сохраняет пользователя
+     *
+     * @param user Пользователь
+     * @return Сохранённый пользователь
+     */
+    User save(User user);
 }
