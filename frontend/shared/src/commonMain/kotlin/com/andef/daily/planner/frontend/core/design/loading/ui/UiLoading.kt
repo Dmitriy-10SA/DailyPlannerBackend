@@ -39,12 +39,12 @@ fun UiLoading(
     if (visible) {
         UiDialogContainer(isLightTheme = isLightTheme, onDismissRequest = onDismissRequest) {
             Column(
-                modifier = Modifier.padding(horizontal = 24.dp),
+                modifier = Modifier.padding(horizontal = 28.dp, vertical = 20.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 CircularProgressIndicator(
-                    modifier = Modifier.size(56.dp),
+                    modifier = Modifier.size(44.dp),
                     color = Blue,
                     trackColor = blackOrWhiteColor(isLightTheme)
                 )
