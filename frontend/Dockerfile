@@ -27,12 +27,15 @@ COPY kotlin-js-store ./kotlin-js-store
 COPY shared/src ./shared/src
 COPY webApp/src ./webApp/src
 
-# Создаётся совместимый production-дистрибутив
-# Основной вариант использует WebAssembly, а JS служит запасным вариантом
-# для браузеров без необходимых возможностей WebAssembly
+# Ограничение памяти Node.js не позволяет Webpack занять всю память сборочного контейнера
+ENV NODE_OPTIONS=--max-old-space-size=1024
+
+# Создаётся production JS-дистрибутив, совместимый с основными браузерами
+# Отдельная Wasm-сборка не выполняется, чтобы не удваивать потребление памяти на Render
+# Один Gradle worker предотвращает параллельный запуск ресурсоёмких задач
 # Кэш Gradle ускоряет повторные сборки и не попадает в итоговый образ
 RUN --mount=type=cache,target=/root/.gradle \
-    ./gradlew :webApp:composeCompatibilityBrowserDistribution --no-daemon
+    ./gradlew :webApp:jsBrowserDistribution --no-daemon --max-workers=1
 
 # Этап запуска содержит только Nginx и готовые статические файлы
 # Образ nginx-unprivileged запускает сервер без прав root
@@ -49,7 +52,7 @@ COPY nginx.conf /etc/nginx/templates/default.conf.template
 
 # Копирование production-дистрибутива из этапа сборки
 COPY --from=build --chown=nginx:nginx \
-    /workspace/webApp/build/dist/composeWebCompatibility/productionExecutable/ \
+    /workspace/webApp/build/dist/js/productionExecutable/ \
     /usr/share/nginx/html/
 
 # Внутренний порт Nginx
