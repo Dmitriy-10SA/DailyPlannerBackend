@@ -2,10 +2,8 @@ package com.andef.daily.planner.frontend.core.design.loading.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,13 +43,11 @@ fun UiLoading(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(1.dp))
                 CircularProgressIndicator(
-                    modifier = Modifier.width(140.dp),
+                    modifier = Modifier.size(56.dp),
                     color = Blue,
                     trackColor = blackOrWhiteColor(isLightTheme)
                 )
-                Spacer(modifier = Modifier.height(1.dp))
             }
         }
     }
