@@ -2,7 +2,6 @@ package com.andef.daily.planner.backend.data.repositories;
 
 import com.andef.daily.planner.backend.data.entities.Event;
 import com.andef.daily.planner.backend.data.entities.User;
-import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,7 +22,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
      * @param user Пользователь
      * @return Найденное мероприятие
      */
-    Optional<@NonNull Event> findByIdAndUser(@NonNull Long id, @NonNull User user);
+    Optional<Event> findByIdAndUser(Long id, User user);
 
     /**
      * Возвращает мероприятия пользователя за выбранный день с учётом поисковой строки
@@ -46,8 +45,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             ORDER BY event.startsAt
             """)
     List<Event> findAllByUserAndDayAndSearchText(
-            @Param("user") @NonNull User user,
-            @Param("day") @NonNull LocalDate day,
+            @Param("user") User user,
+            @Param("day") LocalDate day,
             @Param("searchText") String searchText
     );
 }

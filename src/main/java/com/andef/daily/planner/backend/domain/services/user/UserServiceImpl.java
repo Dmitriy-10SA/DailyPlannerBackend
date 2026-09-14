@@ -2,13 +2,8 @@ package com.andef.daily.planner.backend.domain.services.user;
 
 import com.andef.daily.planner.backend.data.entities.User;
 import com.andef.daily.planner.backend.data.repositories.UserRepository;
-import com.andef.daily.planner.backend.domain.exceptions.LoginAlreadyExistsException;
 import com.andef.daily.planner.backend.domain.exceptions.UserNotFoundException;
-import com.andef.daily.planner.backend.domain.mappers.UserMapper;
-import com.andef.daily.planner.backend.network.dtos.user.RegisterRequestDto;
-import com.andef.daily.planner.backend.network.dtos.user.UserResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,22 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
-
-    @Transactional
-    @Override
-    public UserResponseDto register(RegisterRequestDto request) {
-        if (userRepository.existsByLogin(request.login())) {
-            throw new LoginAlreadyExistsException(request.login());
-        }
-
-        String passwordHash = passwordEncoder.encode(request.password());
-
-        User user = userRepository.save(userMapper.toEntity(request, passwordHash));
-
-        return userMapper.toResponse(user);
-    }
 
     @Transactional(readOnly = true)
     @Override
@@ -51,11 +30,15 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException(login));
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public boolean existsByLogin(String login) {
+        return userRepository.existsByLogin(login);
+    }
+
     @Transactional
     @Override
-    public UserResponseDto changePassword(User user, String password) {
-        user.setPassword(passwordEncoder.encode(password));
-
-        return userMapper.toResponse(userRepository.save(user));
+    public User save(User user) {
+        return userRepository.save(user);
     }
 }

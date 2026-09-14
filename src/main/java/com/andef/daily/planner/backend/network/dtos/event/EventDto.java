@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * @param startsAt Дата и время начала
  * @param endsAt   Дата и время окончания
  */
-public record EventResponseDto(
+public record EventDto(
         Long id,
         String title,
         String location,
