@@ -1,0 +1,12 @@
+.git
+.gradle
+.idea
+build
+docs
+src/test
+.env
+*.iml
+*.log
+.DS_Store
+docker-compose.yml
+docker-compose.yaml
