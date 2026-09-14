@@ -28,7 +28,7 @@ COPY shared/src ./shared/src
 COPY webApp/src ./webApp/src
 
 # Ограничение памяти Node.js не позволяет Webpack занять всю память сборочного контейнера
-ENV NODE_OPTIONS=--max-old-space-size=1024
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 # Создаётся production JS-дистрибутив, совместимый с основными браузерами
 # Отдельная Wasm-сборка не выполняется, чтобы не удваивать потребление памяти на Render
