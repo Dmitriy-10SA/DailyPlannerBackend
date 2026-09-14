@@ -93,7 +93,7 @@ public class EventServiceImpl implements EventService {
      */
     private String normalizeSearchText(String searchText) {
         if (searchText == null || searchText.isBlank()) {
-            return null;
+            return "";
         }
 
         return searchText.strip();

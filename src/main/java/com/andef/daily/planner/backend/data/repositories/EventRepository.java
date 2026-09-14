@@ -29,7 +29,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
      *
      * @param user       Пользователь
      * @param day        Выбранный день
-     * @param searchText Поисковая строка или {@code null}
+     * @param searchText Поисковая строка или пустая строка
      * @return Мероприятия по времени начала
      */
     @Query("""
@@ -38,7 +38,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             WHERE event.user = :user
               AND CAST(event.startsAt AS LocalDate) = :day
               AND (
-                  :searchText IS NULL
+                  :searchText = ''
                   OR LOWER(event.title) LIKE LOWER(CONCAT('%', :searchText, '%'))
                   OR LOWER(event.location) LIKE LOWER(CONCAT('%', :searchText, '%'))
               )
