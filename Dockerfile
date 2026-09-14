@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 # Этап сборки приложения
 # Полный JDK необходим Gradle для компиляции исходного кода и создания JAR-файла
 FROM eclipse-temurin:21-jdk-alpine AS build
@@ -17,7 +19,8 @@ COPY src ./src
 # clean удаляет результаты предыдущей сборки
 # bootJar создаёт JAR со всеми необходимыми зависимостями
 # --no-daemon не оставляет фоновый процесс Gradle внутри временного контейнера
-RUN ./gradlew clean bootJar --no-daemon
+RUN --mount=type=cache,target=/root/.gradle \
+    ./gradlew clean bootJar --no-daemon
 
 # Этап запуска приложения
 # JRE достаточно для запуска готового JAR и занимает меньше места, чем JDK
@@ -42,6 +45,11 @@ USER application
 # EXPOSE не публикует порт на хосте и не открывает к нему доступ из интернета
 # Фактический доступ к порту определяется настройками docker-compose или docker run
 EXPOSE 8080
+
+# Проверка доступности приложения через служебный endpoint Spring Boot
+# Render настраивает собственную проверку по тому же адресу /actuator/health
+HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
+    CMD wget -q -O /dev/null http://127.0.0.1:${PORT:-8080}/actuator/health || exit 1
 
 # Запуск приложения
 # MaxRAMPercentage ограничивает используемую JVM память долей доступной контейнеру памяти

@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
@@ -25,7 +27,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -209,25 +210,29 @@ private fun DayText(
             .padding(vertical = 6.dp)
     }
 
-    val textDecoration = when {
-        isToday && !isChoose -> TextDecoration.Underline
-        else -> null
-    }
-
     val color = when {
         inMonth && isChoose -> White
         inMonth -> blackOrWhiteColor(isLightTheme = isLightTheme)
         else -> grayColor(isLightTheme = isLightTheme).copy(alpha = 0.4f)
     }
 
-    Text(
-        modifier = modifier,
-        fontSize = 14.sp,
-        text = "${date.day}",
-        textAlign = TextAlign.Center,
-        textDecoration = textDecoration,
-        color = color
-    )
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        Text(
+            fontSize = 14.sp,
+            text = "${date.day}",
+            textAlign = TextAlign.Center,
+            color = color
+        )
+        if (isToday && !isChoose) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .size(5.dp)
+                    .clip(CircleShape)
+                    .background(Blue)
+            )
+        }
+    }
 }
 
 @Composable
